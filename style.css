@@ -1,0 +1,33 @@
+/* Картинки в чате: одна небольшая — как есть (натуральный размер, не шире ленты), иначе — превью плиткой */
+.feed .thumbs img.ci-wait, .feed .attach-list img.ci-wait { visibility: hidden; }
+
+.feed .thumbs img.ci-full, .feed .attach-list img.ci-full, .feed .sent-file .attach-list img.ci-full {
+  width: var(--ci-w); max-width: 100%; height: auto; max-height: 80vh; object-fit: contain; cursor: zoom-in; }
+
+.feed .thumbs.ci-grid, .feed .thumbs:has(> img.ci-full) { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+.feed .thumbs img.ci-thumb, .feed .attach-list img.ci-thumb, .feed .sent-file .attach-list img.ci-thumb {
+  width: auto; height: 96px; max-width: 168px; max-height: 96px; object-fit: cover; cursor: zoom-in;
+  border-radius: var(--radius-sm); outline: 1px solid var(--border); background: var(--muted); }
+.feed img.ci-thumb:hover, .feed img.ci-full:hover { outline: 1px solid var(--primary); }
+@media (max-width: 760px) { .feed img.ci-thumb { height: 72px; max-height: 72px; max-width: 30vw; } }
+
+/* Движение — токенами ядра (tokens.css: --ease-out, --dur-hover…; значения из правил движения Icons8): ховер — цвет и
+   лёгкое увеличение превью, нажатие — scale 0.97; движение под ховером — только с мышью */
+.feed img.ci-thumb, .feed img.ci-full { transition: outline-color var(--dur-hover) ease, scale var(--dur-fast) var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .feed img.ci-thumb:hover { scale: 1.04; } }
+.feed img.ci-thumb:active, .feed img.ci-full:active { scale: 0.97; }
+.lightbox .lb-btn { transition: background-color var(--dur-hover) ease, scale var(--dur-fast) var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .lightbox .lb-btn:hover { scale: 1.08; } }
+.lightbox .lb-btn:active { scale: 0.95; }
+/* закрытие: ядро уже спрятало окно — пока оно уходит, оно на месте, но мимо кликов (!important — против общего
+   [hidden] { display: none !important } ядра) */
+.lightbox.ci-closing[hidden] { display: grid !important; pointer-events: none; }
+.lightbox.ci-closing.zoom[hidden] { place-items: start center; }
+/* pan: увеличенную картинку таскают мышью */
+.lightbox.zoom .lb-img { cursor: grab; }
+.lightbox.zoom.ci-panning, .lightbox.zoom.ci-panning .lb-img { cursor: grabbing; user-select: none; }
+@media (prefers-reduced-motion: reduce) {
+  .feed img.ci-thumb, .feed img.ci-full, .lightbox .lb-btn { transition: outline-color var(--dur-hover) ease, background-color var(--dur-hover) ease; }
+  .feed img.ci-thumb:hover, .feed img.ci-thumb:active, .feed img.ci-full:active,
+  .lightbox .lb-btn:hover, .lightbox .lb-btn:active { scale: none; }
+}
