@@ -45,7 +45,8 @@ function scan(root) {
 // клик-зум перетекает и приближает то место, куда кликнули, увеличенную картинку можно таскать мышью.
 // Кривые — токены ядра (tokens.css), длительности — по правилам движения Icons8: окно — 300 мс, закрытие и
 // затемнение — 200, зум — 300 мс ease-in-out.
-const OPEN = ".feed .thumbs img, .feed .attach-list img, .feed .tool-img";
+// и картинки в вариантах вопроса (плагин «Картинки в вариантах», владелец 14.10: «на них должен работать зум»)
+const OPEN = ".feed .thumbs img, .feed .attach-list img, .feed .tool-img, .ask-card .chi-pics img";
 const token = (name, or) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || or;
 let EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)", EASE_IN_OUT = "cubic-bezier(0.77, 0, 0.175, 1)";
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;   // без движения — только прозрачность
@@ -65,7 +66,7 @@ function fly(img, a, b, duration, easing, fade) {   // картинка из п�
 function thumbOf(src) {
   const row = from?.row;
   if (!row?.isConnected) return null;
-  const t = [...row.querySelectorAll(OPEN.replaceAll(".feed ", ""))].find((i) => (i.currentSrc || i.src) === src);
+  const t = [...row.querySelectorAll(OPEN.replaceAll(".feed ", "").replace(".ask-card ", ""))].find((i) => (i.currentSrc || i.src) === src);
   const r = t?.getBoundingClientRect();
   return r && r.width && r.bottom > 0 && r.top < innerHeight ? r : null;
 }
@@ -165,7 +166,7 @@ function motion() {
     }
     const t = e.target.closest?.(OPEN);
     if (!t) return;
-    from = { row: t.closest(".row") || t.closest(".feed"), rect: t.getBoundingClientRect() };
+    from = { row: t.closest(".row") || t.closest("fieldset") || t.closest(".feed"), rect: t.getBoundingClientRect() };
     requestAnimationFrame(() => {   // ядро уже открыло окно, кадр ещё не нарисован
       const box = document.querySelector(".lightbox");
       if (!box || box.hidden) return;
