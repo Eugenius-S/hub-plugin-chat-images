@@ -59,3 +59,12 @@ class Source(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BrokenPictures(unittest.TestCase):
+    @unittest.skipUnless(shutil.which("node"), "нет node")
+    def test_each_picture_is_awaited_once(self):
+        # 15.10, d135762: битые картинки (удалённые сетки MJ) — подписка заново на каждой ошибке удваивала обработчики,
+        # 8 битых в сообщении — миллион подписок, чат вешал страницу
+        out = subprocess.run(["node", os.path.join(ROOT, "tests", "lay.mjs")], capture_output=True, text=True, check=True)
+        self.assertLessEqual(int(out.stdout.strip()), 8 * 4)

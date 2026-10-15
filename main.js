@@ -8,17 +8,23 @@ const known = new Map();           // адрес → { w, h }: перерисо�
 
 const sizeOf = (img) => known.get(img.src) || (img.complete && img.naturalWidth
   ? known.set(img.src, { w: img.naturalWidth, h: img.naturalHeight }).get(img.src) : null);
+const failed = (img) => img.classList.contains("broken") || (img.complete && !img.naturalWidth && !!img.src);
+const waiting = new WeakSet();   // картинки, у которых уже ждём load/error — второй раз не подписываемся
 
-// сообщение целиком: все его картинки и их размеры; не догрузились — ждём (пока ждём, картинка не видна — без прыжка)
+// сообщение целиком: все его картинки и их размеры; не догрузились — ждём (пока ждём, картинка не видна — без прыжка).
+// Ждём каждую один раз: подписка заново на каждой ошибке удваивала обработчики, и чат с десятками битых картинок
+// (удалённые сетки MJ) вешал страницу (владелец 15.10, d135762)
 function lay(row) {
-  const imgs = [...row.querySelectorAll(PICK.replaceAll(".feed ", ""))].filter((i) => !i.classList.contains("broken"));
+  const imgs = [...row.querySelectorAll(PICK.replaceAll(".feed ", ""))].filter((i) => !failed(i));
   if (!imgs.length) return;
   const sizes = imgs.map(sizeOf);
   if (sizes.some((s) => !s)) {
-    for (const [i, img] of imgs.entries()) if (!sizes[i]) {
+    for (const [i, img] of imgs.entries()) if (!sizes[i] && !waiting.has(img)) {
+      waiting.add(img);
       img.classList.add("ci-wait");
-      img.addEventListener("load", () => lay(row), { once: true });
-      img.addEventListener("error", () => { img.classList.remove("ci-wait"); lay(row); }, { once: true });
+      const done = () => { waiting.delete(img); img.classList.remove("ci-wait"); lay(row); };
+      img.addEventListener("load", done, { once: true });
+      img.addEventListener("error", done, { once: true });   // битая — в lay отсеется (failed), ждать её больше нечего
     }
     return;
   }
