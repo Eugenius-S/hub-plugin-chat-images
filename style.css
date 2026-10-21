@@ -1,4 +1,4 @@
-/* Картинки в чате: одна небольшая — как есть (натуральный размер, не шире ленты), иначе — превью плиткой */
+/* Chat images: one small image as is (natural size, not wider than the feed), otherwise previews as tiles */
 .feed .thumbs img.ci-wait, .feed .attach-list img.ci-wait { visibility: hidden; }
 
 .feed .thumbs img.ci-full, .feed .attach-list img.ci-full, .feed .sent-file .attach-list img.ci-full {
@@ -11,19 +11,19 @@
 .feed img.ci-thumb:hover, .feed img.ci-full:hover { outline: 1px solid var(--primary); }
 @media (max-width: 760px) { .feed img.ci-thumb { height: 72px; max-height: 72px; max-width: 30vw; } }
 
-/* Движение — токенами ядра (tokens.css: --ease-out, --dur-hover…; значения из правил движения Icons8): ховер — цвет и
-   лёгкое увеличение превью, нажатие — scale 0.97; движение под ховером — только с мышью */
+/* Motion uses core tokens (tokens.css: --ease-out, --dur-hover...; values from the Icons8 motion rules): hover is colour
+   and a slight preview enlargement, press is scale 0.97; hover motion only with a mouse */
 .feed img.ci-thumb, .feed img.ci-full { transition: outline-color var(--dur-hover) ease, scale var(--dur-fast) var(--ease-out); }
 @media (hover: hover) and (pointer: fine) { .feed img.ci-thumb:hover { scale: 1.04; } }
 .feed img.ci-thumb:active, .feed img.ci-full:active { scale: 0.97; }
 .lightbox .lb-btn { transition: background-color var(--dur-hover) ease, scale var(--dur-fast) var(--ease-out); }
 @media (hover: hover) and (pointer: fine) { .lightbox .lb-btn:hover { scale: 1.08; } }
 .lightbox .lb-btn:active { scale: 0.95; }
-/* закрытие: ядро уже спрятало окно — пока оно уходит, оно на месте, но мимо кликов (!important — против общего
-   [hidden] { display: none !important } ядра) */
+/* closing: the core has already hidden the window; while it exits it stays in place but ignores clicks (!important
+   beats the core's general [hidden] { display: none !important }) */
 .lightbox.ci-closing[hidden] { display: grid !important; pointer-events: none; }
 .lightbox.ci-closing.zoom[hidden] { place-items: start center; }
-/* pan: увеличенную картинку таскают мышью */
+/* pan: the zoomed image is dragged with the mouse */
 .lightbox.zoom .lb-img { cursor: grab; }
 .lightbox.zoom.ci-panning, .lightbox.zoom.ci-panning .lb-img { cursor: grabbing; user-select: none; }
 @media (prefers-reduced-motion: reduce) {

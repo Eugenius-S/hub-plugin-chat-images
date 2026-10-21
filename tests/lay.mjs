@@ -1,5 +1,5 @@
-// lay() на поддельной ленте: 8 битых картинок в сообщении, у каждой — ошибка, потом запасной адрес и ещё ошибка (как
-// делает лента хаба). Печатает, сколько раз плагин подписался на load/error.
+// lay() on a fake feed: 8 broken images in a message, each gets an error, then a fallback address and another error (as
+// the hub feed does). Prints how many times the plugin subscribed to load/error.
 import fs from "node:fs";
 const src = fs.readFileSync(new URL("../main.js", import.meta.url), "utf8");
 const body = src.slice(src.indexOf("const PICK"), src.indexOf("function scan"));
@@ -12,7 +12,7 @@ class Img {
 }
 const imgs = Array.from({ length: 8 }, (_, i) => new Img(i));
 const row = { querySelectorAll: () => imgs };
-const make = new Function(body + "\nreturn lay;")();
+const make = new Function("t", body + "\nreturn lay;")((k) => k);   // t: the plugin string lookup, stubbed
 make(row);
 for (let round = 0; round < 2; round++)
   for (const img of imgs) { img.complete = true; img.fire("error"); if (round === 0) { img.complete = false; img.src += "&raw"; } }
