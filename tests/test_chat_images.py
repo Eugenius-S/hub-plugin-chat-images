@@ -26,7 +26,7 @@ class Manifest(unittest.TestCase):
 
 class Source(unittest.TestCase):
     def test_rules_of_the_owner(self):
-        # владелец 12.10: картинки агента — всегда в чате; большая или много — небольшие превью; клик — лайтбокс
+        # картинки агента — всегда в чате; большая или много — небольшие превью; клик — лайтбокс
         js = read("main.js")
         self.assertIn('".feed .thumbs img, .feed .attach-list img"', js)   # картинки сообщения и присланные файлы
         self.assertIn("BIG = { w: 1000, h: 750 }", js)
@@ -40,7 +40,7 @@ class Source(unittest.TestCase):
         self.assertIn("max-width: 100%", css)                 # как есть, но не шире ленты
 
     def test_motion(self):
-        # владелец 12.10: «плавное открытие, ховеры и зум», «когда позумил — пусть включается pan»
+        # «плавное открытие, ховеры и зум», «когда позумил — пусть включается pan»
         js, css = read("main.js"), read("style.css")
         self.assertIn('prefers-reduced-motion: reduce', js)    # без движения — только прозрачность
         self.assertIn('prefers-reduced-motion: reduce', css)
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 class BrokenPictures(unittest.TestCase):
     @unittest.skipUnless(shutil.which("node"), "нет node")
     def test_each_picture_is_awaited_once(self):
-        # 15.10, d135762: битые картинки (удалённые сетки MJ) — подписка заново на каждой ошибке удваивала обработчики,
+        # битые картинки (удалённые сетки MJ) — подписка заново на каждой ошибке удваивала обработчики,
         # 8 битых в сообщении — миллион подписок, чат вешал страницу
         out = subprocess.run(["node", os.path.join(ROOT, "tests", "lay.mjs")], capture_output=True, text=True, check=True)
         self.assertLessEqual(int(out.stdout.strip()), 8 * 4)
