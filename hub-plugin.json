@@ -1,15 +1,15 @@
 {
   "name": "chat-images",
   "icon": "icon.png",
-  "description": "Images from the agent show right in the chat: big ones at full size, several in a row as small previews. A click opens the image full screen: page with the arrows, zoom with a click, drag with the mouse",
+  "description": "Images from the agent show right in the chat: big ones at full size, several in a row as small previews. A click opens an image full screen: flip with the arrows, zoom with a click, drag with the mouse.",
   "why": "The image is visible at once, without opening a file, and a row of screenshots does not stretch the chat",
   "i18n": {
     "ru": {
-      "description": "Картинки от агента видны прямо в чате, большие и несколько подряд уменьшенными. По клику картинка открывается на весь экран: можно листать стрелками, приближать кликом и двигать мышью",
+      "description": "Картинки от агента видны прямо в чате: большие целиком, несколько подряд уменьшенными. Клик открывает картинку на весь экран: листайте стрелками, приближайте кликом, двигайте мышью.",
       "why": "Картинку видно сразу, без открытия файла, а ряд скриншотов не растягивает чат"
     }
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "hub": "^1.10",
   "web": "main.js"
 }
