@@ -31,3 +31,6 @@
   .feed img.ci-thumb:hover, .feed img.ci-thumb:active, .feed img.ci-full:active,
   .lightbox .lb-btn:hover, .lightbox .lb-btn:active { scale: none; }
 }
+
+/* Clean (html.th-clean): the outline under the cursor is the neutral line of the theme, not the blue accent */
+html.th-clean .feed img.ci-thumb:hover, html.th-clean .feed img.ci-full:hover { outline-color: var(--c-line-strong); }
